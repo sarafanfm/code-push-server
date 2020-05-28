@@ -196,15 +196,15 @@ common.unzipFile = function (zipFile, outputPath) {
       log.error(e);
       return reject(new AppError.AppError(e.message))
     }
-    extract(zipFile, {dir: outputPath}, function(err){
-      if (err) {
-        log.error(err);
-        reject(new AppError.AppError(`it's not a zipFile`))
-      } else {
+    extract(zipFile, {dir: outputPath})
+      .then(() => {
         log.debug(`unzipFile success`);
         resolve(outputPath);
-      }
-    });
+      })
+      .catch(err => {
+        log.error(err);
+        reject(new AppError.AppError(`it's not a zipFile`));
+      });
   });
 };
 
