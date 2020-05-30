@@ -1,3 +1,7 @@
+## Fork of [lisong/code-push-server](https://github.com/lisong/code-push-server).
+
+Updated deps, removed cluster mode. Original README:
+
 # CodePush Server [source](https://github.com/lisong/code-push-server) 
 
 [![NPM](https://nodei.co/npm/code-push-server.svg?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/code-push-server/)
