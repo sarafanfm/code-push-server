@@ -20,6 +20,7 @@ config.development = {
     bucketName: "",
     downloadUrl: "" // Binary files download host address.
   },
+  /*
   // Config for upyun (https://www.upyun.com/) storage when storageType value is "upyun"
   upyun: {
     storageDir: process.env.UPYUN_STORAGE_DIR,
@@ -28,6 +29,7 @@ config.development = {
     operatorPass: process.env.UPYUN_OPERATOR_PASS,
     downloadUrl: process.env.DOWNLOAD_URL,
   },
+  */
   // Config for Amazon s3 (https://aws.amazon.com/cn/s3/) storage when storageType value is "s3".
   s3: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,

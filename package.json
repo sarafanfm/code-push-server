@@ -63,7 +63,6 @@
     "sequelize": "^5.15.1",
     "serve-favicon": "^2.4.0",
     "slash": "^2.0.0",
-    "upyun": "^3.3.9",
     "validator": "^10.6.0",
     "yargs": "^15.3.1",
     "yazl": "^2.3.0"

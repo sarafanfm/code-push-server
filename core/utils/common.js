@@ -7,7 +7,7 @@ var config    = require('../config');
 var _ = require('lodash');
 var validator = require('validator');
 var qiniu = require("qiniu");
-var upyun = require('upyun');
+//var upyun = require('upyun');
 var common = {};
 var AppError = require('../app-error');
 var jschardet = require("jschardet");
@@ -226,8 +226,10 @@ common.uploadFileToStorage = function (key, filePath) {
     return common.uploadFileToOSS(key, filePath);
   } else if (storageType === 'qiniu') {
     return common.uploadFileToQiniu(key, filePath);
+  /*
   } else if (storageType === 'upyun') {
     return common.uploadFileToUpyun(key, filePath);
+  */
   } else if (storageType === 'tencentcloud') {
     return common.uploadFileToTencentCloud(key, filePath);
   }
@@ -352,7 +354,7 @@ common.uploadFileToQiniu = function (key, filePath) {
     });
   });
 };
-
+/*
 common.uploadFileToUpyun = function (key, filePath) {
   var serviceName = _.get(config, "upyun.serviceName");
   var operatorName = _.get(config, "upyun.operatorName");
@@ -389,7 +391,7 @@ common.uploadFileToUpyun = function (key, filePath) {
     })
   );
 };
-
+*/
 common.uploadFileToS3 = function (key, filePath) {
   var AWS = require('aws-sdk');
   return (
