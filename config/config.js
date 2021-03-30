@@ -13,23 +13,6 @@ config.development = {
     logging: false,
     operatorsAliases: false,
   },
-  // Config for qiniu (http://www.qiniu.com/) cloud storage when storageType value is "qiniu".
-  qiniu: {
-    accessKey: "",
-    secretKey: "",
-    bucketName: "",
-    downloadUrl: "" // Binary files download host address.
-  },
-  /*
-  // Config for upyun (https://www.upyun.com/) storage when storageType value is "upyun"
-  upyun: {
-    storageDir: process.env.UPYUN_STORAGE_DIR,
-    serviceName: process.env.UPYUN_SERVICE_NAME,
-    operatorName: process.env.UPYUN_OPERATOR_NAME,
-    operatorPass: process.env.UPYUN_OPERATOR_PASS,
-    downloadUrl: process.env.DOWNLOAD_URL,
-  },
-  */
   // Config for Amazon s3 (https://aws.amazon.com/cn/s3/) storage when storageType value is "s3".
   s3: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -83,7 +66,7 @@ config.development = {
     diffNums: 3,
     // data dir for caclulate diff files. it's optimization.
     dataDir: process.env.DATA_DIR || os.tmpdir(),
-    // storageType which is your binary package files store. options value is ("local" | "qiniu" | "s3"| "oss" || "tencentcloud")
+    // storageType which is your binary package files store. options value is ("local" | "s3"| "oss" || "tencentcloud")
     storageType: process.env.STORAGE_TYPE || "local",
     // options value is (true | false), when it's true, it will cache updateCheck results in redis.
     updateCheckCache: false,

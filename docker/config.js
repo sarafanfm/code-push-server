@@ -38,7 +38,7 @@ config.development = {
     diffNums: 3,
     // data dir for caclulate diff files. it's optimization.
     dataDir: process.env.DATA_DIR,
-    // storageType which is your binary package files store. options value is ("local" | "qiniu" | "s3")
+    // storageType which is your binary package files store. options value is ("local" | "s3")
     storageType: "local",
     // options value is (true | false), when it's true, it will cache updateCheck results in redis.
     updateCheckCache: false,

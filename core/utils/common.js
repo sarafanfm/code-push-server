@@ -6,8 +6,6 @@ var extract = require('extract-zip')
 var config    = require('../config');
 var _ = require('lodash');
 var validator = require('validator');
-var qiniu = require("qiniu");
-//var upyun = require('upyun');
 var common = {};
 var AppError = require('../app-error');
 var jschardet = require("jschardet");
@@ -208,14 +206,6 @@ common.unzipFile = function (zipFile, outputPath) {
   });
 };
 
-common.getUploadTokenQiniu = function (mac, bucket, key) {
-  var options = {
-    scope: bucket + ":" + key
-  }
-  var putPolicy = new qiniu.rs.PutPolicy(options);
-  return putPolicy.uploadToken(mac);
-};
-
 common.uploadFileToStorage = function (key, filePath) {
   var storageType = _.get(config, 'common.storageType');
   if ( storageType === 'local') {
@@ -224,12 +214,6 @@ common.uploadFileToStorage = function (key, filePath) {
     return common.uploadFileToS3(key, filePath);
   } else if (storageType === 'oss') {
     return common.uploadFileToOSS(key, filePath);
-  } else if (storageType === 'qiniu') {
-    return common.uploadFileToQiniu(key, filePath);
-  /*
-  } else if (storageType === 'upyun') {
-    return common.uploadFileToUpyun(key, filePath);
-  */
   } else if (storageType === 'tencentcloud') {
     return common.uploadFileToTencentCloud(key, filePath);
   }
@@ -308,90 +292,6 @@ common.getBlobDownloadUrl = function (blobUrl) {
   return `${downloadUrl}/${fileName}`
 };
 
-
-common.uploadFileToQiniu = function (key, filePath) {
-  return new Promise((resolve, reject) => {
-    var accessKey = _.get(config, "qiniu.accessKey");
-    var secretKey = _.get(config, "qiniu.secretKey");
-    var bucket = _.get(config, "qiniu.bucketName", "");
-    var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
-    var conf = new qiniu.conf.Config();
-    var bucketManager = new qiniu.rs.BucketManager(mac, conf);
-    bucketManager.stat(bucket, key, (respErr, respBody, respInfo) => {
-      if (respErr) {
-        log.debug('uploadFileToQiniu file stat:', respErr);
-        return reject(new AppError.AppError(respErr.message));
-      }
-      log.debug('uploadFileToQiniu file stat respBody:', respBody);
-      log.debug('uploadFileToQiniu file stat respInfo:', respInfo);
-      if (respInfo.statusCode == 200) {
-        resolve(respBody.hash);
-      } else {
-        try {
-          var uploadToken = common.getUploadTokenQiniu(mac, bucket, key);
-        } catch (e) {
-          return reject(new AppError.AppError(e.message));
-        }
-        var formUploader = new qiniu.form_up.FormUploader(conf);
-        var putExtra = new qiniu.form_up.PutExtra();
-        formUploader.putFile(uploadToken, key, filePath, putExtra, (respErr, respBody, respInfo) => {
-          if(respErr) {
-            log.error('uploadFileToQiniu putFile:', respErr);
-            // 上传失败， 处理返回代码
-            return reject(new AppError.AppError(JSON.stringify(respErr)));
-          } else {
-            log.debug('uploadFileToQiniu putFile respBody:', respBody);
-            log.debug('uploadFileToQiniu putFile respInfo:', respInfo);
-            // 上传成功， 处理返回值
-            if (respInfo.statusCode == 200) {
-              return resolve(respBody.hash);
-            } else {
-              return reject(new AppError.AppError(respBody.error));
-            }
-          }
-        });
-      }
-    });
-  });
-};
-/*
-common.uploadFileToUpyun = function (key, filePath) {
-  var serviceName = _.get(config, "upyun.serviceName");
-  var operatorName = _.get(config, "upyun.operatorName");
-  var operatorPass = _.get(config, "upyun.operatorPass", "");
-  var storageDir = _.get(config, "upyun.storageDir", "");
-  var service = new upyun.Service(serviceName, operatorName, operatorPass);
-  var client = new upyun.Client(service);
-  return (
-    new Promise((resolve, reject) => {
-      client.makeDir(storageDir).then(result => {
-        if(!storageDir) {
-          reject(new AppError.AppError('Please config the upyun remoteDir!'));
-          return;
-        }
-        let remotePath = storageDir + '/' + key;
-        log.debug('uploadFileToUpyun remotePath:', remotePath);
-        log.debug('uploadFileToUpyun mkDir result:', result);
-        client.putFile(remotePath, fs.createReadStream(filePath)).then(data => {
-          log.debug('uploadFileToUpyun putFile response:', data);
-          if(data) {
-            resolve(key)
-          } else {
-            log.debug('uploadFileToUpyun putFile failed!', data);
-            reject(new AppError.AppError('Upload file to upyun failed!'));
-          }
-        }).catch(e1 => {
-          log.debug('uploadFileToUpyun putFile exception e1:', e1);
-          reject(new AppError.AppError(JSON.stringify(e1)));
-        })
-      }).catch(e => {
-        log.debug('uploadFileToUpyun putFile exception e:', e);
-        reject(new AppError.AppError(JSON.stringify(e)));
-      });
-    })
-  );
-};
-*/
 common.uploadFileToS3 = function (key, filePath) {
   var AWS = require('aws-sdk');
   return (

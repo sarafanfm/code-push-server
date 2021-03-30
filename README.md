@@ -15,13 +15,10 @@ Updated deps, removed cluster mode. Original README:
 [![Known Vulnerabilities](https://snyk.io/test/npm/code-push-server/badge.svg)](https://snyk.io/test/npm/code-push-server)
 [![Licenses](https://img.shields.io/npm/l/code-push-server.svg)](https://spdx.org/licenses/MIT)
 
-CodePush Server is a CodePush progam server! microsoft CodePush cloud is slow in China, we can use this to build our's. I use [qiniu](http://www.qiniu.com/) to store the files, because it's simple and quick!  Or you can use [local/s3/oss/tencentcloud] storage, just modify config.js file, it's simple configure.
-
 
 ## Support Storage mode 
 
 - local *storage bundle file in local machine*
-- qiniu *storage bundle file in [qiniu](http://www.qiniu.com/)*
 - s3 *storage bundle file in [aws](https://aws.amazon.com/)*
 - oss *storage bundle file in [aliyun](https://www.aliyun.com/product/oss)*
 - tencentcloud *storage bundle file in [tencentcloud](https://cloud.tencent.com/product/cos)*

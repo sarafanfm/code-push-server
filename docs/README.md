@@ -156,7 +156,6 @@ $ tail -f "output file path"
 ## Support Storage mode 
 
 - local (default)
-- qiniu (qiniu)
 - s3 (aws)
 - oss (aliyun)
 - tencentcloud
